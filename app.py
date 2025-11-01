@@ -114,7 +114,7 @@ with st.sidebar:
         st.error("❌ OpenAI: Not connected")
         st.caption("Set [openai] api_key in Secrets or OPENAI_API_KEY env var.")
     else:
-        st.success("✅ OpenAI: Connected")("🧠 TRIZ 40 GPT Problem Statement Generator")
+        st.success("✅ OpenAI: Connected")
 
 st.write(
     "Please **SELECT** the Contradiction Parameters and the Industry to **GENERATE** the ChatGPT Problem Statement prompt."
@@ -229,3 +229,4 @@ if st.button("🤖 Generate with ChatGPT"):
                 st.error(f"Error generating response: {e}")
 
 st.caption("Data: TRIZ 39 parameters, 40 principles, and 39×39 matrix. IDs are authoritative; empty cells mean 'No principles defined.'")
+
