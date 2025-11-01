@@ -3,6 +3,7 @@ from pathlib import Path
 import streamlit as st
 import pandas as pd
 from openai import OpenAI
+import os
 
 # ---------- File paths (repo root on Streamlit Cloud) ----------
 MATRIX_PATH = Path("triz_matrix_manufacturing.json")
@@ -11,12 +12,32 @@ INDUSTRY_PATH = Path("By Industry.txt")
 # ---------- Secrets / Client ----------
 @st.cache_resource
 def get_openai_client():
-    # Expect the key in Streamlit Secrets -> [openai] api_key = "sk-..."
-    api_key = st.secrets.get("openai", {}).get("api_key")
+    """Robust client init that works on Streamlit Cloud.
+    - Reads from Secrets: [openai] api_key
+    - Fallback to env OPENAI_API_KEY
+    - Never raises: returns None and surfaces a readable error in the UI
+    """
+    api_key = None
+    # Secrets (preferred)
+    try:
+        if "openai" in st.secrets and "api_key" in st.secrets["openai"]:
+            api_key = str(st.secrets["openai"]["api_key"]).strip()
+    except Exception:
+        api_key = None
+    # Env fallback
     if not api_key:
-        st.warning("OpenAI API key not found. Add it in Streamlit Secrets under [openai] api_key.")
+        api_key = os.getenv("OPENAI_API_KEY", "").strip()
+
+    if not api_key:
+        st.warning("OpenAI API key not found. Add it in Streamlit Secrets under [openai] api_key or set OPENAI_API_KEY.")
         return None
-    return OpenAI(api_key=api_key)
+
+    try:
+        client = OpenAI(api_key=api_key)
+        return client
+    except Exception as e:
+        st.error(f"Failed to initialize OpenAI client: {type(e).__name__}: {e}")
+        return None
 
 # ---------- Loaders ----------
 @st.cache_data
@@ -87,6 +108,13 @@ st.markdown(_css(st.session_state.dark_mode), unsafe_allow_html=True)
 
 st.title("🧠 TRIZ 40 GPT Problem Statement Generator")
 client = get_openai_client()
+with st.sidebar:
+    st.markdown("### API Status")
+    if client is None:
+        st.error("❌ OpenAI: Not connected")
+        st.caption("Set [openai] api_key in Secrets or OPENAI_API_KEY env var.")
+    else:
+        st.success("✅ OpenAI: Connected")("🧠 TRIZ 40 GPT Problem Statement Generator")
 
 st.write(
     "Please **SELECT** the Contradiction Parameters and the Industry to **GENERATE** the ChatGPT Problem Statement prompt."
@@ -199,6 +227,5 @@ if st.button("🤖 Generate with ChatGPT"):
                 st.write(content)
             except Exception as e:
                 st.error(f"Error generating response: {e}")
-
 
 st.caption("Data: TRIZ 39 parameters, 40 principles, and 39×39 matrix. IDs are authoritative; empty cells mean 'No principles defined.'")
