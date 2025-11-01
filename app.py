@@ -12,7 +12,7 @@ INDUSTRY_PATH = Path("By Industry.txt")
 
 # ---------- Page ----------
 st.set_page_config(
-    page_title="TRIZ 40 GPT Problem Statement Generator",
+    page_title="TrizGPT Generator",
     page_icon="🧠",
     layout="centered",
 )
@@ -35,7 +35,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🧠 TRIZ 40 GPT Problem Statement Generator")
+st.title("🧠 TrizGPT Generator")
 
 # ---------- OpenAI Client ----------
 @st.cache_resource
@@ -211,3 +211,4 @@ if st.button(btn_label, disabled=btn_disabled):
 
 # ---------- Footer ----------
 st.caption("Data: TRIZ 39 parameters, 40 principles, and 39×39 matrix. IDs are authoritative; empty cells mean “No principles defined.”")
+
