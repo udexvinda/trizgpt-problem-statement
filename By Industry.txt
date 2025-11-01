@@ -1,0 +1,47 @@
+Accounting
+Aerospace
+Agriculture
+Airline
+Appliances
+Automotive
+Biotechnology
+Chemicals
+Computers
+Construction
+Consumer Products
+Distribution
+Education
+Electronics
+Energy and Utility
+Engineering
+Entertainment
+Financial Services/Banking
+Food/Beverage
+Furniture
+Government/Military
+Healthcare
+Hospitality
+Insurance
+Legal Services
+Logistics
+Machinery
+Machinery Equipment
+Marketing
+Medical Equipment
+Metals
+Mining
+Non-Profit
+Petroleum/Oil/Gas
+Pharmaceutical
+Publishing
+Professional Services/Business Services
+Real Estate
+Research Organization
+Retail
+Semiconductors
+Software
+Steel
+Telecommunication
+Transportation
+Environmental
+Wholesale Distribution
