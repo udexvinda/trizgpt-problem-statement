@@ -10,62 +10,37 @@ from openai import OpenAI
 MATRIX_PATH = Path("triz_matrix_manufacturing.json")
 INDUSTRY_PATH = Path("By Industry.txt")
 
-# ---------- Page & Theme ----------
+# ---------- Page ----------
 st.set_page_config(
-    page_title="TRIZ GPT Generator",
+    page_title="TRIZ 40 GPT Problem Statement Generator",
     page_icon="🧠",
     layout="centered",
 )
 
-# Dark mode toggle
-if "dark_mode" not in st.session_state:
-    st.session_state.dark_mode = False
-st.session_state.dark_mode = st.toggle("🌙 Dark mode", value=st.session_state.dark_mode)
+# ---------- Styles ----------
+st.markdown("""
+<style>
+    .main {background-color: #f8f9fa;}
+    h1, h2, h3, h4 {color: #003366;}
+    .stButton>button {
+        background-color: #003366; color: white; border-radius: 10px;
+        height: 3em; width: 100%; font-weight: bold; border: none;
+    }
+    .stButton>button:hover {
+        background-color: #0055a5; color: #ffffff; transform: scale(1.02);
+    }
+    .stButton>button:disabled {
+        background-color: #adb5bd; color: #eee; cursor: not-allowed;
+    }
+</style>
+""", unsafe_allow_html=True)
 
-
-def _css(dark: bool) -> str:
-    if not dark:
-        return """
-        <style>
-            .main {background-color: #f8f9fa;}
-            h1, h2, h3, h4 {color: #003366;}
-            .stButton>button {
-                background-color: #003366; color: white; border-radius: 10px;
-                height: 3em; width: 100%; font-weight: bold; border: none;
-            }
-            .stButton>button:hover {
-                background-color: #0055a5; color: #ffffff; transform: scale(1.02);
-            }
-            .stButton>button:disabled {
-                background-color: #adb5bd; color: #eee; cursor: not-allowed;
-            }
-        </style>
-        """
-    else:
-        return """
-        <style>
-            .main {background-color: #0f172a;}
-            h1, h2, h3, h4 {color: #c7d2fe;}
-            .stButton>button {
-                background-color: #1d4ed8; color: white; border-radius: 10px;
-                height: 3em; width: 100%; font-weight: bold; border: none;
-            }
-            .stButton>button:hover {
-                background-color: #2563eb; color: #ffffff; transform: scale(1.02);
-            }
-            .stButton>button:disabled {
-                background-color: #475569; color: #9ca3af; cursor: not-allowed;
-            }
-        </style>
-        """
-
-
-st.markdown(_css(st.session_state.dark_mode), unsafe_allow_html=True)
-st.title("🧠 TRIZ GPT Generator")
+st.title("🧠 TRIZ 40 GPT Problem Statement Generator")
 
 # ---------- OpenAI Client ----------
 @st.cache_resource
 def get_openai_client():
+    """Initialize OpenAI client from Streamlit Secrets or environment variable."""
     api_key = (
         st.secrets.get("openai", {}).get("api_key")
         if "openai" in st.secrets
@@ -85,7 +60,7 @@ with st.sidebar:
     st.markdown("### API Status")
     if client is None:
         st.error("❌ OpenAI: Not connected")
-        st.caption("Add [openai] api_key in Secrets or OPENAI_API_KEY in env.")
+        st.caption("Add [openai] api_key in Secrets or set OPENAI_API_KEY in environment.")
     else:
         st.success("✅ OpenAI: Connected")
 
@@ -236,7 +211,3 @@ if st.button(btn_label, disabled=btn_disabled):
 
 # ---------- Footer ----------
 st.caption("Data: TRIZ 39 parameters, 40 principles, and 39×39 matrix. IDs are authoritative; empty cells mean “No principles defined.”")
-
-
-
-
