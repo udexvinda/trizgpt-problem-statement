@@ -86,7 +86,7 @@ def _css(dark: bool) -> str:
 st.markdown(_css(st.session_state.dark_mode), unsafe_allow_html=True)
 
 st.title("🧠 TRIZ 40 GPT Problem Statement Generator")
-client = get_openai_client()("🧠 TRIZ 40 GPT Problem Statement Generator")
+client = get_openai_client()
 
 st.write(
     "Please **SELECT** the Contradiction Parameters and the Industry to **GENERATE** the ChatGPT Problem Statement prompt."
@@ -199,5 +199,6 @@ if st.button("🤖 Generate with ChatGPT"):
                 st.write(content)
             except Exception as e:
                 st.error(f"Error generating response: {e}")
+
 
 st.caption("Data: TRIZ 39 parameters, 40 principles, and 39×39 matrix. IDs are authoritative; empty cells mean 'No principles defined.'")
